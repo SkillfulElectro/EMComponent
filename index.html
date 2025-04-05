@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Component Host - 2 Instances in Row</title>
+    <!-- Ensure EMComponent.js path is correct -->
+    <script src="EMComponent.js"></script>
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background: linear-gradient(to bottom right, #ffffff, #1c3d5a);
+            min-height: 100vh;
+            padding: 20px 0;
+        }
+
+        /* Wrapper to hold components in a row */
+        #components-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 20px;
+            padding: 0 1rem;
+            box-sizing: border-box;
+            width: 100%;
+        }
+
+        /* Style for the containers that will host the components */
+        .component-host {
+            width: 100%;
+            max-width: 400px;
+            padding: 1rem;
+            box-sizing: border-box;
+            border: 1px solid rgba(200, 200, 200, 0.3); /* Subtle border */
+            min-height: 50px;
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Wrapper Div using Flexbox to arrange component hosts -->
+    <div id="components-wrapper">
+        <!-- Container 1 for the first component instance -->
+        <div id="login-component-container-1" class="component-host">
+            <p>Loading Component 1...</p>
+        </div>
+
+        <!-- Container 2 for the second component instance -->
+        <div id="login-component-container-2" class="component-host">
+            <p>Loading Component 2...</p>
+        </div>
+    </div>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log("Host page: DOM Loaded. Initializing components...");
+
+            // --- Path to the component's HTML file ---
+            const componentHtmlPath = "./login-page/login.html";
+
+            // --- Create two EMComponent instances ---
+            // Note: Using global injection mode. EMComponent attempts to deduplicate
+            // external CSS/JS based on URL, but inline scripts/styles will be
+            // processed for each instance. Ensure component scripts handle potential
+            // multiple executions if necessary.
+            const loginComponent1 = new EMComponent(componentHtmlPath);
+            const loginComponent2 = new EMComponent(componentHtmlPath);
+
+            console.log(`Host page: Initiating attachment for Component 1...`);
+            loginComponent1.attachToElementById(
+                "login-component-container-1", // Target the first container
+                (componentInstance) => {
+                    // Callback on successful load
+                    console.log(`%cHost page: Component 1 loaded successfully.`, 'color: #007bff; font-weight: bold;');
+                },
+                (error) => {
+                    // Callback on error
+                    console.error(`%cHost page: Component 1 failed to load:`, 'color: red; font-weight: bold;', error);
+                    const container = document.getElementById("login-component-container-1");
+                    if(container) container.innerHTML = '<p style="color: red; text-align: center;">Failed to load component 1.</p>';
+                }
+            );
+
+            console.log(`Host page: Initiating attachment for Component 2...`);
+            loginComponent2.attachToElementById(
+                "login-component-container-2", // Target the second container
+                (componentInstance) => {
+                    // Callback on successful load
+                    console.log(`%cHost page: Component 2 loaded successfully.`, 'color: #007bff; font-weight: bold;');
+                },
+                (error) => {
+                    // Callback on error
+                    console.error(`%cHost page: Component 2 failed to load:`, 'color: red; font-weight: bold;', error);
+                    const container = document.getElementById("login-component-container-2");
+                    if(container) container.innerHTML = '<p style="color: red; text-align: center;">Failed to load component 2.</p>';
+                }
+            );
+
+            console.log(`Host page: All component attachments initiated.`);
+        });
+    </script>
+</body>
+</html>
