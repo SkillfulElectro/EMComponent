@@ -6,6 +6,7 @@
 
 ## Usage Example
 - check out index.html and login-page
+- demo : https://skillfulelectro.github.io/EMComponent/
 
 ## Component Authoring Guidelines
 - To ensure your HTML, CSS, and JavaScript work correctly when loaded via EMComponent, follow these guidelines:
